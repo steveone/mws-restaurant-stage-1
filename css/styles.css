@@ -77,6 +77,30 @@ nav h1 a {
   letter-spacing: 10px;
   text-transform: uppercase;
 }
+
+@media screen and (min-width: 500px){
+
+ #pageTitle {
+   color: #fff;
+   font-size: 14pt;
+   font-weight: 200;
+   letter-spacing: 10px;
+   text-transform: uppercase;
+ }
+}
+
+@media screen and (min-width:0px) and (max-width: 499px){
+
+ #pageTitle {
+   color: #fff;
+   font-size: 10pt;
+   font-weight: 200;
+   letter-spacing: 10px;
+   text-transform: uppercase;
+ }
+}
+
+
 #breadcrumb {
     padding: 10px 40px 16px;
     list-style: none;
