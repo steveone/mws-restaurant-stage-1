@@ -138,13 +138,42 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('div');
   li.className = 'restaurant';
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
+  const picture = document.createElement('picture');
+//  picture.className = 'restaurant-img';
+
+  let image = document.createElement('source');
+  image.media = "(min-width:800px)"
+  image.srcset = DBHelper.imageUrlForRestaurant(restaurant);
+  var locJPG = image.srcset.indexOf('.');
+  var baseJPG = image.srcset.slice(0,locJPG);
+  image.srcset = baseJPG + '-800_large.jpg 1x';
+  picture.append(image);
+
+  image = document.createElement('source');
+  image.media = "(min-width:400px)"
+  image.srcset = DBHelper.imageUrlForRestaurant(restaurant);
+  var locJPG = image.srcset.indexOf('.');
+  var baseJPG = image.srcset.slice(0,locJPG);
+  image.srcset = baseJPG + '-400_medium.jpg 1x';
+  picture.append(image);
+
+  image = document.createElement('source');
+  image.media = "(min-width:200px)"
+  image.srcset = DBHelper.imageUrlForRestaurant(restaurant);
+  var locJPG = image.srcset.indexOf('.');
+  var baseJPG = image.srcset.slice(0,locJPG);
+  image.srcset = baseJPG + '-200_small.jpg 1x';
+  picture.append(image);
+
+  image = document.createElement('img');
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   var locJPG = image.src.indexOf('.');
   var baseJPG = image.src.slice(0,locJPG);
   image.src = baseJPG + '-800_large.jpg';
-  li.append(image);
+  image.className = 'restaurant-img';
+  picture.append(image);
+
+  li.append(picture);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
