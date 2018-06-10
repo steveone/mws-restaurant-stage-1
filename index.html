@@ -37,12 +37,6 @@
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap&key=
 AIzaSyAusO2YmlV65kLXLIsQFWacYqGoai0k138">
-
-   google.maps.event.addListenerOnce(self.map, 'idle', () => {
-     document.getElementsByTagName('iframe')[0].title = "Google Maps";
-     console.log("in map listener event");
-   });
-
 </script>
 
 
@@ -56,6 +50,12 @@ AIzaSyAusO2YmlV65kLXLIsQFWacYqGoai0k138">
              .then(function() { console.log("Service Worker Registered"); });
   }
 
+document.addEventListener("click", function(el){
+  if (el.target.className == 'button') {
+    let link = el.target.attributes.link.nodeValue;
+    window.location.href = link;
+    }
+  });
 
   </script>
 </body>
