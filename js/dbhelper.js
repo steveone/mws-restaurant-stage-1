@@ -149,9 +149,28 @@ class DBHelper {
   /**
    * Restaurant image URL.
    */
-  static imageUrlForRestaurant(restaurant) {
+/*  static imageUrlForRestaurant(restaurant) {
     return (`/img/${restaurant.photograph}`);
   }
+*/
+  static imageUrlForRestaurant(restaurant) {
+    console.log("returning image");
+    let img = `/img/${restaurant.photograph}`;
+    var locJPG = img.indexOf('.');
+    var baseJPG = img.slice(0,locJPG);
+    let picture = `
+      <source media='(min-width:800px)' srcset='${baseJPG}-800_large.jpg 1x'/>
+      <source media='(min-width:400px)' srcset='${baseJPG}-400_medium.jpg 1x'/>
+      <source media='(min-width:200px)' srcset='${baseJPG}-200_small.jpg 1x'/>
+      <img src='http://localhost:8000/${baseJPG}-800_large.jpg' class='restaurant-img'
+      alt='Restaurant image for ${restaurant.name}'/>
+    `;
+  
+    console.log("returning ");
+    console.log(picture);
+    return (picture);
+  }
+
 
   /**
    * Map marker for a restaurant.

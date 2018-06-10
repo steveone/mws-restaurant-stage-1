@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
@@ -9,6 +9,7 @@
 
 <body>
   <header>
+    <a href='#after-map-container' class='skip-link'>Skip to main content</a>
     <nav>
       <h1><div id="pageTitle" tabindex="0">Restaurant Reviews</div></h1>
     </nav>
@@ -18,7 +19,7 @@
     <section id="map-container">
       <div id="map"></div>
     </section>
-    <section>
+    <section id="after-map-container">
       <div class="filter-options">
         <h2>Filter Results</h2>
         <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
@@ -34,7 +35,8 @@
 
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap&key=
+AIzaSyAusO2YmlV65kLXLIsQFWacYqGoai0k138"></script>
 
 
   <footer id="footer">
