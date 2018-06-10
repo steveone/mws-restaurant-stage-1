@@ -9,18 +9,15 @@
   <title>Restaurant Info</title>
 </head>
 
-<body class="inside">
+<body class='inside'>
   <!-- Beginning header -->
   <header>
     <!-- Beginning nav -->
     <nav>
+      <a href='#after-map-container' class='skip-link'>Skip to main content</a>
+
       <h1><a href="/">Restaurant Reviews</a></h1>
     </nav>
-    <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" >
-      <li><a href="/">Home</a></li>
-    </ul>
-    <!-- End breadcrumb -->
     <!-- End nav -->
   </header>
   <!-- End header -->
@@ -30,10 +27,17 @@
     <!-- Beginning map -->
     <section id="map-container">
       <div id="map"></div>
+      <ul id="breadcrumb" >
+        <li><a href="/">Home</a></li>
+      </ul>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
-    <section id="restaurant-container">
+    <section id="restaurant-container" id="after-map-container">
+      <!-- Beginning breadcrumb -->
+
+      <!-- End breadcrumb -->
+
       <h1 id="restaurant-name"></h1>
       <picture id="restaurant-img"></picture>
       <p id="restaurant-cuisine"></p>
