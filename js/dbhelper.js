@@ -154,7 +154,6 @@ class DBHelper {
   }
 */
   static imageUrlForRestaurant(restaurant) {
-    console.log("returning image");
     let img = `/img/${restaurant.photograph}`;
     var locJPG = img.indexOf('.');
     var baseJPG = img.slice(0,locJPG);
@@ -165,9 +164,7 @@ class DBHelper {
       <img src='http://localhost:8000/${baseJPG}-800_large.jpg' class='restaurant-img'
       alt='Restaurant image for ${restaurant.name}'/>
     `;
-  
-    console.log("returning ");
-    console.log(picture);
+
     return (picture);
   }
 

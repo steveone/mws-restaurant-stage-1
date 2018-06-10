@@ -22,10 +22,10 @@
     <section id="after-map-container">
       <div class="filter-options">
         <h2>Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+        <select aria-label="Neighbood Selector" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select aria-label="Cuisine Selector" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
           <option value="all">All Cuisines</option>
         </select>
       </div>
@@ -36,7 +36,14 @@
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap&key=
-AIzaSyAusO2YmlV65kLXLIsQFWacYqGoai0k138"></script>
+AIzaSyAusO2YmlV65kLXLIsQFWacYqGoai0k138">
+
+   google.maps.event.addListenerOnce(self.map, 'idle', () => {
+     document.getElementsByTagName('iframe')[0].title = "Google Maps";
+     console.log("in map listener event");
+   });
+
+</script>
 
 
   <footer id="footer">
@@ -48,6 +55,8 @@ AIzaSyAusO2YmlV65kLXLIsQFWacYqGoai0k138"></script>
              .register('/js/sw.js')
              .then(function() { console.log("Service Worker Registered"); });
   }
+
+
   </script>
 </body>
 
