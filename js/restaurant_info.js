@@ -17,6 +17,10 @@ window.initMap = () => {
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
     }
+    google.maps.event.addListenerOnce(self.map, 'idle', () => {
+      document.getElementsByTagName('iframe')[0].title = "Google Maps";
+      console.log("in map listener event");
+    });
   });
 }
 
@@ -107,8 +111,10 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     return;
   }
   const ul = document.getElementById('reviews-list');
+  let i =1;
   reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    ul.appendChild(createReviewHTML(review,i));
+    i++;
   });
   container.appendChild(ul);
 }
@@ -116,8 +122,12 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
-createReviewHTML = (review) => {
+createReviewHTML = (review,i) => {
   const li = document.createElement('li');
+  li.id = i;
+  li.setAttribute('tabindex',i);
+  li.setAttribute('closed', true);
+  li.className = 'review';
   const name = document.createElement('p');
   name.innerHTML = review.name;
   li.appendChild(name);
@@ -131,6 +141,8 @@ createReviewHTML = (review) => {
   li.appendChild(rating);
 
   const comments = document.createElement('p');
+  comments.className = 'reviewText';
+  comments.id = 'reviewText' + i;
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 
@@ -162,3 +174,39 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+document.body.onkeyup = function(e){
+    if(e.keyCode == 32){
+        clicked(e);
+    }
+}
+
+document.addEventListener("click", function(el){
+  clicked(e);
+});
+
+var clicked = function(el){
+  if ((el.target.className == 'review') || (el.target.className == 'reviewText')) {
+
+    document.querySelectorAll('.review').forEach(function(item) {
+      if (item.id !== el.target.id){
+        console.log("in if not equal");
+        item.setAttribute('closed', 'true');
+        let reviewTextId = 'reviewText' + item.id;
+        document.getElementById(reviewTextId).style.whiteSpace='nowrap';
+      }
+    });
+
+    let review = document.getElementById(el.target.id);
+    if (review.getAttribute('closed') == 'true'){
+      el.target.setAttribute('closed', 'false');
+      let reviewTextId = 'reviewText' + el.target.id;
+      document.getElementById(reviewTextId).style.whiteSpace='normal';
+    }
+    else {
+      el.target.setAttribute('closed', 'true');
+      let reviewTextId = 'reviewText' + el.target.id;
+      document.getElementById(reviewTextId).style.whiteSpace='nowrap';
+    }
+  }
+};
