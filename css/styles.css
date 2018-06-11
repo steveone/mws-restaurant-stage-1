@@ -210,8 +210,7 @@ button {
 	  width: 100%;
 	  height: 150px;
 		text-align: center;
-	/*  background-color: #3397DB;*/
-	  background-color: #00385f;
+	  background-color: #010e6b;
 	  align-items: center;
 	}
 
@@ -238,8 +237,7 @@ button {
 	.filter-options {
 	  width: 100%;
 	  height: 70px;
-	/*  background-color: #3397DB;*/
-	  background-color: #00385f;
+	  background-color: #010e6b;
 	  align-items: center;
 	}
 
@@ -260,8 +258,7 @@ button {
 	.filter-options {
 	  width: 100%;
 	  height: 70px;
-	/*  background-color: #3397DB;*/
-	  background-color: #00385f;
+	  background-color: #010e6b;
 	  align-items: center;
 	}
 }
@@ -392,7 +389,7 @@ button {
 .inside #footer {
   bottom: 0;
   position: absolute;
-  width: 50%;
+  width: 100%;
 
 }
 #restaurant-name {
@@ -404,7 +401,15 @@ button {
   margin: 15px 0 30px;
   text-transform: uppercase;
   line-height: 1.1;
+	background-color:#010e6b;
+	text-align:center;
 }
+
+h2{
+	background-color:#010e6b;
+	text-align:center;
+}
+
 #restaurant-img {
 	width: 80%;
 	align-content:center;

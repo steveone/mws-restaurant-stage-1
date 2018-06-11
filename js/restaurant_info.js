@@ -125,7 +125,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 createReviewHTML = (review,i) => {
   const li = document.createElement('li');
   li.id = i;
-  li.setAttribute('tabindex',i);
+  li.setAttribute('tabindex',0);
   li.setAttribute('closed', true);
   li.className = 'review';
   const name = document.createElement('p');
@@ -182,7 +182,7 @@ document.body.onkeyup = function(e){
 }
 
 document.addEventListener("click", function(el){
-  clicked(e);
+  clicked(el);
 });
 
 var clicked = function(el){

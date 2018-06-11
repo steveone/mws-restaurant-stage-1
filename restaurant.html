@@ -71,7 +71,20 @@
 AIzaSyAusO2YmlV65kLXLIsQFWacYqGoai0k138">
 </script>  <!-- End scripts -->
 
+<script type="text/javascript">
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+           .register('/js/sw.js')
+           .then(function() { console.log("Service Worker Registered"); });
+}
 
+document.addEventListener("click", function(el){
+if (el.target.className == 'button') {
+  let link = el.target.attributes.link.nodeValue;
+  window.location.href = link;
+  }
+});
+</script>
 </body>
 
 </html>

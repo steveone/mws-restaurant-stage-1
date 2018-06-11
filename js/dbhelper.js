@@ -161,7 +161,7 @@ class DBHelper {
       <source media='(min-width:800px)' srcset='${baseJPG}-800_large.jpg 1x'/>
       <source media='(min-width:400px)' srcset='${baseJPG}-400_medium.jpg 1x'/>
       <source media='(min-width:200px)' srcset='${baseJPG}-200_small.jpg 1x'/>
-      <img src='http://localhost:8000/${baseJPG}-800_large.jpg' class='restaurant-img'
+      <img src='http://localhost:8000${baseJPG}-800_large.jpg' class='restaurant-img'
       alt='Restaurant image for ${restaurant.name}'/>
     `;
 
