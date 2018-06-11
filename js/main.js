@@ -167,17 +167,12 @@ createRestaurantHTML = (restaurant) => {
   address.innerHTML = restaurant.address.replace(',','<br>');
   li.append(address);
 
-  const button = document.createElement('Div');
-  const more = document.createElement('Button');
+  const button = document.createElement('a');
   button.className = 'center';
-  //more.innerHTML = 'View Details';
+  button.innerHTML = 'View Details';
   const textNode = document.createTextNode('View Details');
-  more.className = 'button';
-  more.appendChild(textNode);
   let link =  DBHelper.urlForRestaurant(restaurant);
-  more.setAttribute('link',link);
-  //more.href = DBHelper.urlForRestaurant(restaurant);
-  button.append(more);
+  button.href = DBHelper.urlForRestaurant(restaurant);
   li.append(button);
 
   return li

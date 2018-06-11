@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <link rel="stylesheet" href="css/styles.css">
@@ -50,12 +50,7 @@ AIzaSyAusO2YmlV65kLXLIsQFWacYqGoai0k138">
              .then(function() { console.log("Service Worker Registered"); });
   }
 
-document.addEventListener("click", function(el){
-  if (el.target.className == 'button') {
-    let link = el.target.attributes.link.nodeValue;
-    window.location.href = link;
-    }
-  });
+
 
   </script>
 </body>
