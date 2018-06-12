@@ -85,7 +85,7 @@ window.initMap = () => {
 
      google.maps.event.addListenerOnce(self.map, 'idle', () => {
        document.getElementsByTagName('iframe')[0].title = "Google Maps";
-       console.log("in map listener event");
+       document.getElementsByTagName('iframe')[0].setAttribute("aria-role","application");
      });
 
 }

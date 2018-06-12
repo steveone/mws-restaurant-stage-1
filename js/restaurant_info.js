@@ -19,7 +19,7 @@ window.initMap = () => {
     }
     google.maps.event.addListenerOnce(self.map, 'idle', () => {
       document.getElementsByTagName('iframe')[0].title = "Google Maps";
-      console.log("in map listener event");
+      document.getElementsByTagName('iframe')[0].setAttribute("aria-role","application");
     });
   });
 }
@@ -88,6 +88,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     row.appendChild(day);
 
     const time = document.createElement('td');
+    time.setAttribute('tabindex','0');
     time.innerHTML = operatingHours[key];
     row.appendChild(time);
 
