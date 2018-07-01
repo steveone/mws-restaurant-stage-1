@@ -8,8 +8,8 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+    const port = 1337; // Change this to your server port
+    return `http://localhost:${port}/restaurants/`;
   }
 
   /**
@@ -20,8 +20,10 @@ class DBHelper {
     xhr.open('GET', DBHelper.DATABASE_URL);
     xhr.onload = () => {
       if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
+        const restaurants = JSON.parse(xhr.responseText);
+      //  const restaurants = json.restaurants;
+        //console.log(json);
+
         callback(null, restaurants);
       } else { // Oops!. Got an error from server.
         const error = (`Request failed. Returned status of ${xhr.status}`);
@@ -92,6 +94,7 @@ class DBHelper {
         callback(error, null);
       } else {
         let results = restaurants
+        console.log(restaurants);
         if (cuisine != 'all') { // filter by cuisine
           results = results.filter(r => r.cuisine_type == cuisine);
         }
@@ -155,8 +158,9 @@ class DBHelper {
 */
   static imageUrlForRestaurant(restaurant) {
     let img = `/img/${restaurant.photograph}`;
-    var locJPG = img.indexOf('.');
-    var baseJPG = img.slice(0,locJPG);
+    //var locJPG = img.indexOf('.');
+    //var baseJPG = img.slice(0,locJPG);
+    let baseJPG = `/img/${restaurant.photograph}`;
     let picture = `
       <source media='(min-width:800px)' srcset='${baseJPG}-800_large.jpg 1x'/>
       <source media='(min-width:400px)' srcset='${baseJPG}-400_medium.jpg 1x'/>
