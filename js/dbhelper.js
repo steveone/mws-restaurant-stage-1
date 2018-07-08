@@ -1,7 +1,39 @@
+
 /**
  * Common database helper functions.
  */
+ var dbPromise;
+
+
 class DBHelper {
+
+
+static loadIDB() {
+  dbPromise = idb.open('restaurants', 1, function(upgradeDb) {
+    console.log("idb open called");
+    switch(upgradeDb.oldVersion) {
+      case 0:
+        var keyValStore = upgradeDb.createObjectStore('keyval');
+        //keyValStore.put("world", "hello");
+        keyValStore.createIndex('neighborhood', 'neighborhood');
+        keyValStore.createIndex('cuisine_type', 'cuisine_type');
+    }
+  });
+}
+
+
+
+static addOrUpdateDB(restaurant){
+  // set "foo" to be "bar" in "keyval"
+  dbPromise.then(function(db) {
+    var tx = db.transaction('keyval', 'readwrite');
+    var keyValStore = tx.objectStore('keyval');
+    keyValStore.put(restaurant, restaurant.id);
+    return tx.complete;
+  }).then(function() {
+    console.log(`Added ${restaurant.id} - ${restaurant} to keyval`);
+  });
+}
 
   /**
    * Database URL.
@@ -16,13 +48,19 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-
     fetch(DBHelper.DATABASE_URL)
     .then(response => response.json())
+    .then(restaurants => {
+      restaurants.forEach(function(restaurant){
+        console.log(restaurant);
+        DBHelper.addOrUpdateDB(restaurant);
+      })
+    })
     .then(data => {callback(null,data)})
     .catch(error => {callback(error,null)});
 
   }
+
 
   /**
    * Fetch a restaurant by its ID.
@@ -85,7 +123,7 @@ class DBHelper {
         callback(error, null);
       } else {
         let results = restaurants
-        console.log(restaurants);
+        console.log(results);
         if (cuisine != 'all') { // filter by cuisine
           results = results.filter(r => r.cuisine_type == cuisine);
         }

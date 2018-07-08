@@ -1,3 +1,6 @@
+
+
+
 var staticCacheName = 'mws-restaurant';
 var allCaches = [
   staticCacheName,
@@ -68,6 +71,9 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
   if (requestUrl.origin === location.origin) {
+
+console.log(requestUrl);
+
     if (requestUrl.pathname === '/') {
       event.respondWith(caches.match('/'));
       return;

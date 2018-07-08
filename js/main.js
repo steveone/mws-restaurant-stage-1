@@ -5,6 +5,8 @@ var newMap
 var markers = []
 
 
+DBHelper.loadIDB();
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -90,7 +92,6 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
      id: 'mapbox.streets'
    }).addTo(newMap);
-
    updateRestaurants();
  }
 
@@ -127,7 +128,6 @@ updateRestaurants = () => {
 
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
-
   DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
     if (error) { // Got an error!
       console.error(error);
@@ -151,6 +151,8 @@ resetRestaurants = (restaurants) => {
   self.markers.forEach(m => m.setMap(null));
   self.markers = [];
   self.restaurants = restaurants;
+  console.log(json);
+  console.log(json);
 }
 
 /**
