@@ -151,8 +151,6 @@ resetRestaurants = (restaurants) => {
   self.markers.forEach(m => m.setMap(null));
   self.markers = [];
   self.restaurants = restaurants;
-  console.log(json);
-  console.log(json);
 }
 
 /**

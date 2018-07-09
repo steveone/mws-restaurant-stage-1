@@ -31,7 +31,7 @@ static addOrUpdateDB(restaurant){
     keyValStore.put(restaurant, restaurant.id);
     return tx.complete;
   }).then(function() {
-    console.log(`Added ${restaurant.id} - ${restaurant} to keyval`);
+    //console.log(`Added ${restaurant.id} - ${restaurant} to keyval`);
   });
 }
 
@@ -52,11 +52,13 @@ static addOrUpdateDB(restaurant){
     .then(response => response.json())
     .then(restaurants => {
       restaurants.forEach(function(restaurant){
-        console.log(restaurant);
+        //console.log(restaurant);
         DBHelper.addOrUpdateDB(restaurant);
       })
+      return restaurants;
     })
-    .then(data => {callback(null,data)})
+    .then(data => {
+    callback(null,data)})
     .catch(error => {callback(error,null)});
 
   }
