@@ -43,11 +43,11 @@ static addOrUpdateDB(restaurant){
     const port = 1337; // Change this to your server port
     return `http://localhost:${port}/restaurants/`;
   }
-
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
+    console.log('about to try fetching')
     fetch(DBHelper.DATABASE_URL)
     .then(response => response.json())
     .then(restaurants => {
@@ -59,8 +59,21 @@ static addOrUpdateDB(restaurant){
     })
     .then(data => {
     callback(null,data)})
-    .catch(error => {callback(error,null)});
-
+    //if error occurs with fetch, fall back to data stored in indexeddb
+    .catch(error => {
+      console.log('in catch')
+      console.log(dbPromise);
+      dbPromise.then(function(db) {
+       return db.transaction('keyval')
+         .objectStore('keyval').getAll();
+      }).then(function(data) {
+        console.log('data returned:');
+        console.log(data);
+        callback(null,data);
+      })
+      .catch(error =>{
+        callback(error,null)});
+      });
   }
 
 
