@@ -1,9 +1,6 @@
-
-
-
-var staticCacheName = 'mws-restaurant';
+var staticCacheName = "mws-restaurant";
 var allCaches = [
-  staticCacheName,
+  staticCacheName
 ];
 
 self.addEventListener('install', function(event) {
@@ -46,7 +43,7 @@ self.addEventListener('install', function(event) {
         '/img/3-200_small.jpg',
         '/img/6-400_medium.jpg',
         '/img/9-800_large.jpg',
-        'manifest.json',
+        '/manifest.json',
         'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
         'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff'
       ]);
@@ -86,4 +83,10 @@ console.log(requestUrl);
       return response || fetch(event.request);
     })
   );
+});
+
+self.addEventListener('message', function(event) {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
 });
