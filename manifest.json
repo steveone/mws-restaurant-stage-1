@@ -1,0 +1,22 @@
+{
+  "name": "MWS Restaurants",
+  "short_name": "Restaurants",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#db5945",
+  "description": "Restaurant Search",
+  "theme_color":  "#db5945",
+
+"icons": [
+    {
+      "src": "/img/google-map-icon-map-7.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/img/google-map-icon-map-7.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}
