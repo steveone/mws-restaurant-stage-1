@@ -51,6 +51,7 @@ self.addEventListener('install', function(event) {
   );
 });
 
+
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
@@ -71,13 +72,14 @@ self.addEventListener('fetch', function(event) {
   if (requestUrl.origin === location.origin) {
 
 console.log(requestUrl);
-
+console.log("matched");
     if (requestUrl.pathname === '/') {
       event.respondWith(caches.match('/'));
       return;
     }
 
 }
+  console.log('did not match location.origin');
   event.respondWith(
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
@@ -86,6 +88,7 @@ console.log(requestUrl);
 });
 
 self.addEventListener('message', function(event) {
+  console.log('sw got message, message was ' + event.data.action);
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }
