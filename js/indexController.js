@@ -6,7 +6,7 @@ let registerServiceWorker = function() {
   console.log("server worker is supported");
   var indexController = this;
 
-  navigator.serviceWorker.register('js/sw.js').then(function(reg) {
+  navigator.serviceWorker.register('/js/sw.js').then(function(reg) {
     console.log("service worker registered");
     if (!navigator.serviceWorker.controller) {
       return;

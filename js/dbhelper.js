@@ -61,7 +61,7 @@ static addOrUpdateDB(restaurant){
     callback(null,data)})
     //if error occurs with fetch, fall back to data stored in indexeddb
     .catch(error => {
-      console.log('in catch')
+      console.log('in catch inside dbhelper')
       console.log(dbPromise);
       dbPromise.then(function(db) {
        return db.transaction('keyval')

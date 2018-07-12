@@ -68,6 +68,8 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
+  console.log('sw doing fetch request');
+  console.log(event.request);
   var requestUrl = new URL(event.request.url);
   if (requestUrl.origin === location.origin) {
 
@@ -84,7 +86,22 @@ console.log("matched");
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
     })
-  );
+  )
+    .catch(function(error) {
+      console.log("fetch error, try using local cache");
+      if (requestUrl.pathname === '/') {
+      event.respondWith(caches.match('/index.html'));
+      return;
+    }
+    if (requestUrl.pathname.startsWith('/img/')) {
+      event.respondWith(servePhoto(event.request));
+      return;
+    }
+      caches.match(event.request).then(function(response) {
+      return response;
+  });
+})
+
 });
 
 self.addEventListener('message', function(event) {
@@ -92,4 +109,4 @@ self.addEventListener('message', function(event) {
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }
-});
+})
