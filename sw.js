@@ -76,8 +76,11 @@ self.addEventListener('fetch', function(event) {
 console.log(requestUrl);
 console.log("matched");
     if (requestUrl.pathname === '/') {
-      event.respondWith(caches.match('/'));
-      return;
+      event.respondWith(
+    caches.match(event.request).then(function(response) {
+      return response || fetch(event.request);
+    })
+  );
     }
 
 }
