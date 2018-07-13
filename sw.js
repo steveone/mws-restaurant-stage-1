@@ -5,6 +5,7 @@ var allCaches = [
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
+    //open the cache and save files needed for the project
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         '/index.html',
@@ -67,6 +68,8 @@ self.addEventListener('activate', function(event) {
   );
 });
 
+
+//listen for and handle fetch accounts if in the cache
 self.addEventListener('fetch', function(event) {
   console.log('sw doing fetch request');
   console.log(event.request);
