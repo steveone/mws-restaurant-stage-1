@@ -544,6 +544,21 @@ p.address{
 	height:60px;
 }
 
+.inside #footer {
+  bottom: 0;
+  position: absolute;
+  width: 85%;
+
+}
+
+.inside #restaurant-img img {
+	width: 50%;
+	height:50%;
+	align-content:center;
+	float:left;
+	margin-right:20px;
+}
+
  #pageTitle {
    color: #fff;
    font-size: 10pt;
