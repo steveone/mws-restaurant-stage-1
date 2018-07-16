@@ -1,7 +1,6 @@
 let restaurant;
 var map;
 
-
 DBHelper.loadIDB();
 /**
  * Initialize Google map, called from HTML.

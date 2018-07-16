@@ -9,6 +9,7 @@ class DBHelper {
 
 
 static loadIDB() {
+  console.log("loading idb");
   dbPromise = idb.open('restaurants', 1, function(upgradeDb) {
     console.log("idb open called");
     switch(upgradeDb.oldVersion) {

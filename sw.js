@@ -12,6 +12,8 @@ self.addEventListener('install', function(event) {
         '/js/main.js',
         '/css/styles.css',
         '/js/restaurant_info.js',
+        '/js/dbhelper.js',
+
       //  '/data/restaurants.json',
         '/restaurant.html',
         '/img/1-200_small.jpg',
@@ -91,9 +93,7 @@ console.log("matched");
   event.respondWith(
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
-    })
-  )
-    .catch(function(error) {
+    }).catch(function(error) {
       console.log("fetch error, try using local cache");
       if (requestUrl.pathname === '/') {
       event.respondWith(caches.match('/index.html'));
@@ -103,12 +103,13 @@ console.log("matched");
       event.respondWith(servePhoto(event.request));
       return;
     }
+  }))
       caches.match(event.request).then(function(response) {
       return response;
   });
 })
 
-});
+
 
 self.addEventListener('message', function(event) {
   console.log('sw got message, message was ' + event.data.action);
