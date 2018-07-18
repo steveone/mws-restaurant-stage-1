@@ -1,5 +1,6 @@
 
 
+
 let registerServiceWorker = function() {
   console.log("in register service worker");
   if (!navigator.serviceWorker) return;
@@ -46,3 +47,7 @@ let registerServiceWorker = function() {
     refreshing = true;
   });
 };
+
+if('serviceWorker' in navigator) {
+    registerServiceWorker();
+}

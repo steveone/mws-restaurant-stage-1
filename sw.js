@@ -84,11 +84,12 @@ console.log("matched");
       event.respondWith(
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
-    })
-  );
-    }
-
+      })
+    );
+  }
 }
+
+
   console.log('did not match location.origin');
   event.respondWith(
     caches.match(event.request).then(function(response) {
