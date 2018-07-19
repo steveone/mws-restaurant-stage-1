@@ -28,11 +28,11 @@ let registerServiceWorker = function() {
     reg.addEventListener('updatefound', function() {
       console.log("update found");
     //  indexController._trackInstalling(reg.installing);
-        reg.installing.addEventListener('statechange'),function(){
+        reg.installing.addEventListener('statechange',function(){
           if (this.state == 'installed') {
             console.log("there is an update ready");
           }
-        }
+        });
     });
   });
 

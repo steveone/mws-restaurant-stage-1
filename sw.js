@@ -74,18 +74,23 @@ self.addEventListener('activate', function(event) {
 //listen for and handle fetch accounts if in the cache
 self.addEventListener('fetch', function(event) {
   console.log('sw doing fetch request');
-  console.log(event.request);
+  //console.log(event.request);
   var requestUrl = new URL(event.request.url);
   if (requestUrl.origin === location.origin) {
 
-console.log(requestUrl);
-console.log("matched");
+//console.log(requestUrl);
+console.log("matched localtion.origin");
     if (requestUrl.pathname === '/') {
+      console.log("Requested "/" so respond with cache")
       event.respondWith(
-    caches.match(event.request).then(function(response) {
+      caches.match("index.html").then(function(response) {
       return response || fetch(event.request);
       })
     );
+  }
+  if(requestUrl.pathname.startsWith("/restaurant.html")){
+    event.respondWith(caches.match('/restaurant.html'));
+    return;
   }
 }
 
@@ -100,14 +105,14 @@ console.log("matched");
       event.respondWith(caches.match('/index.html'));
       return;
     }
-    if (requestUrl.pathname.startsWith('/img/')) {
-      event.respondWith(servePhoto(event.request));
-      return;
-    }
-  }))
+      if(requestUrl.pathname.startsWith("/restaurant.html")){
+        event.respondWith(caches.match('/restaurant.html'));
+        return;
+      }
       caches.match(event.request).then(function(response) {
       return response;
-  });
+  })
+}));
 })
 
 
