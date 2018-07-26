@@ -92,7 +92,6 @@ console.log("matched localtion.origin");
     event.respondWith(caches.match('/restaurant.html'));
     return;
   }
-}
 
 
   console.log('did not match location.origin');
@@ -113,6 +112,8 @@ console.log("matched localtion.origin");
       return response;
   })
 }));
+}
+
 })
 
 
