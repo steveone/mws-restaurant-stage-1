@@ -73,15 +73,16 @@ self.addEventListener('activate', function(event) {
 
 //listen for and handle fetch accounts if in the cache
 self.addEventListener('fetch', function(event) {
-  console.log('sw doing fetch request');
+//  console.log('sw doing fetch request');
+//  console.log(event);
   //console.log(event.request);
   var requestUrl = new URL(event.request.url);
   if (requestUrl.origin === location.origin) {
 
 //console.log(requestUrl);
-console.log("matched localtion.origin");
+//console.log("matched location.origin");
     if (requestUrl.pathname === '/') {
-      console.log("Requested "/" so respond with cache")
+    //  console.log("Requested "/" so respond with cache")
       event.respondWith(
       caches.match("index.html").then(function(response) {
       return response || fetch(event.request);
@@ -94,7 +95,7 @@ console.log("matched localtion.origin");
   }
 
 
-  console.log('did not match location.origin');
+  //console.log('did not match location.origin');
   event.respondWith(
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request);

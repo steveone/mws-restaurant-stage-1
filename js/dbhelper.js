@@ -3,7 +3,7 @@
  * Common database helper functions.
  */
  var dbPromise;
-
+ var dbPromise_reviews;
 
 class DBHelper {
 
@@ -18,6 +18,16 @@ static loadIDB() {
         //keyValStore.put("world", "hello");
         keyValStore.createIndex('neighborhood', 'neighborhood');
         keyValStore.createIndex('cuisine_type', 'cuisine_type');
+    }
+  });
+
+  dbPromise_reviews = idb.open('restaurant_reviews', 1, function(upgradeDb) {
+    console.log("idb for reviews open called");
+    switch(upgradeDb.oldVersion) {
+      case 0:
+        var keyValStore = upgradeDb.createObjectStore('keyval');
+        keyValStore.createIndex('restaurant_id', 'restaurant_id');
+
     }
   });
 }
@@ -36,20 +46,37 @@ static addOrUpdateDB(restaurant){
   });
 }
 
-  /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
-   */
-  static get DATABASE_URL() {
-    const port = 1337; // Change this to your server port
-    return `http://localhost:${port}/restaurants/`;
-  }
+static addOrUpdateDB_review(review){
+  // set "foo" to be "bar" in "keyval"
+  dbPromise_reviews.then(function(db) {
+    var tx = db.transaction('keyval', 'readwrite');
+    var keyValStore = tx.objectStore('keyval');
+//    console.log(review);
+    keyValStore.put(review, review.id);
+    return tx.complete;
+  }).then(function() {
+    //console.log(`Added ${review.id} - ${review} to keyval`);
+  });
+}
+
+/**
+ * Database URL.
+ * Change this to restaurants.json file location on your server.
+ */
+static get DATABASE_URL_RESTAURANTS() {
+  const port = 1337; // Change this to your server port
+  return `http://localhost:${port}/restaurants/`;
+}
+static get DATABASE_URL_REVIEWS() {
+  const port = 1337; // Change this to your server port
+  return `http://localhost:${port}/reviews/`;
+}
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
     console.log('about to try fetching')
-    fetch(DBHelper.DATABASE_URL)
+    fetch(DBHelper.DATABASE_URL_RESTAURANTS)
     .then(response => response.json())
     .then(restaurants => {
       restaurants.forEach(function(restaurant){
@@ -62,14 +89,14 @@ static addOrUpdateDB(restaurant){
     callback(null,data)})
     //if error occurs with fetch, fall back to data stored in indexeddb
     .catch(error => {
-      console.log('in catch inside dbhelper')
-      console.log(dbPromise);
+//      console.log('in catch inside dbhelper')
+//      console.log(dbPromise);
       dbPromise.then(function(db) {
        return db.transaction('keyval')
          .objectStore('keyval').getAll();
       }).then(function(data) {
-        console.log('data returned:');
-        console.log(data);
+//        console.log('data returned:');
+//        console.log(data);
         callback(null,data);
       })
       .catch(error =>{
@@ -77,6 +104,59 @@ static addOrUpdateDB(restaurant){
       });
   }
 
+
+
+  static fetchRestaurant_reviews(callback) {
+    console.log('about to try fetching')
+    fetch(DBHelper.DATABASE_URL_REVIEWS)
+    .then(response => response.json())
+    .then(reviews => {
+//      console.log(reviews);
+      reviews.forEach(function(review){
+//       console.log(review);
+        DBHelper.addOrUpdateDB_review(review)
+      })
+      return reviews;
+    })
+    .then(data => {
+      callback(null,data)
+    })
+    //if error occurs with fetch, fall back to data stored in indexeddb
+    .catch(error => {
+  //      console.log('in catch inside dbhelper')
+  //      console.log(dbPromise);
+      dbPromise_reviews.then(function(db) {
+       return db.transaction('keyval')
+         .objectStore('keyval').getAll();
+      }).then(function(data) {
+  //        console.log('data returned:');
+  //        console.log(data);
+        callback(null,data);
+      })
+      .catch(error =>{
+        callback(error,null)});
+      });
+  }
+
+
+  /**
+   * Fetch a restaurant review by its restaurant ID.
+   */
+  static fetchReviewsByRestaurantId(id, callback) {
+    // fetch all restaurants with proper error handling.
+    DBHelper.fetchRestaurant_reviews((error, reviews) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        const review = reviews.filter(r => r.restaurant_id == id);
+        if (review) { // Got the restaurant
+          callback(null, review);
+        } else { // Restaurant does not exist in the database
+          callback('No Reviews exist for this restaurant id does not exist', null);
+        }
+      }
+    });
+  }
 
   /**
    * Fetch a restaurant by its ID.

@@ -37,6 +37,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
        DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
      }
    });
+   fetchRestaurantReviewsFromURL((error,restaurant)=> {
+     if (error) { // Got an error!
+       console.error(error);
+     }
+   })
  }
  /*
 window.initMap = () => {
@@ -81,9 +86,30 @@ fetchRestaurantFromURL = (callback) => {
       }
       fillRestaurantHTML();
       callback(null, restaurant)
+
     });
+
   }
 }
+
+fetchRestaurantReviewsFromURL = (callback) => {
+  const id = getParameterByName('id');
+  if (!id) { // no id found in URL
+    error = 'No restaurant id in URL'
+    callback(error, null);
+  } else {
+        DBHelper.fetchReviewsByRestaurantId(id, (error, reviews) => {
+          console.log("in restaurant reviews trying to get reviews")
+          self.restaurant.reviews = reviews;
+          if (!reviews) {
+            console.error(error);
+            return;
+          }
+          fillReviewsHTML();
+      });
+    }
+}
+
 
 /**
  * Create restaurant HTML and add it to the webpage
@@ -108,7 +134,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     fillRestaurantHoursHTML();
   }
   // fill reviews
-  fillReviewsHTML();
+
+//  fillReviewsHTML();
 }
 
 /**
@@ -135,6 +162,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
+// fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
