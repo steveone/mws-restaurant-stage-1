@@ -82,21 +82,23 @@ self.addEventListener('fetch', function(event) {
 //console.log(requestUrl);
 //console.log("matched location.origin");
     if (requestUrl.pathname === '/') {
-    //  console.log("Requested "/" so respond with cache")
+      console.log("Requested "/" so respond with cache")
       event.respondWith(
       caches.match("index.html").then(function(response) {
       return response || fetch(event.request);
       })
     );
   }
-  if(requestUrl.pathname.startsWith("/restaurant.html")){
+
+  else if(requestUrl.pathname.startsWith("/restaurant.html")){
     event.respondWith(caches.match('/restaurant.html'));
     return;
   }
 
-
+else {
   //console.log('did not match location.origin');
   event.respondWith(
+//    console.log(event.request);
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
     }).catch(function(error) {
@@ -113,6 +115,7 @@ self.addEventListener('fetch', function(event) {
       return response;
   })
 }));
+}
 }
 
 })

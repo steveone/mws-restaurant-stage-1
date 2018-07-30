@@ -75,7 +75,7 @@ static get DATABASE_URL_REVIEWS() {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    console.log('about to try fetching')
+    console.log('about to try fetching ' + DBHelper.DATABASE_URL_RESTAURANTS)
     fetch(DBHelper.DATABASE_URL_RESTAURANTS)
     .then(response => response.json())
     .then(restaurants => {
@@ -271,7 +271,8 @@ static get DATABASE_URL_REVIEWS() {
    * Restaurant page URL.
    */
   static urlForRestaurant(restaurant) {
-    return (`./restaurant.html?id=${restaurant.id}`);
+    //console.log(`/restaurant.html?id=${restaurant.id}`);
+    return (`/restaurant.html?id=${restaurant.id}`);
   }
 
   /**
