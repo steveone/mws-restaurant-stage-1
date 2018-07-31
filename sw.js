@@ -15,7 +15,6 @@ self.addEventListener('install', function(event) {
         '/js/dbhelper.js',
         '/js/idb.js',
         '/js/indexController.js',
-      //  '/data/restaurants.json',
         '/restaurant.html',
         '/img/1-200_small.jpg',
         '/img/3-400_medium.jpg',
@@ -47,6 +46,9 @@ self.addEventListener('install', function(event) {
         '/img/3-200_small.jpg',
         '/img/6-400_medium.jpg',
         '/img/9-800_large.jpg',
+        '/img/undefined_200_small.jpg'
+        '/img/undefined_400_medium.jpg'
+        '/img/undefined_800_large.jpg'
         '/manifest.json',
         'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
         'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff'
