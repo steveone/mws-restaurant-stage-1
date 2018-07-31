@@ -13,7 +13,8 @@ self.addEventListener('install', function(event) {
         '/css/styles.css',
         '/js/restaurant_info.js',
         '/js/dbhelper.js',
-
+        '/js/idb.js',
+        '/js/indexController.js',
       //  '/data/restaurants.json',
         '/restaurant.html',
         '/img/1-200_small.jpg',
