@@ -24,8 +24,9 @@ restaurant {
 	width:200em;
 }
 
-h1.restaurantName {
-	height:50px
+h2.restaurantName {
+	height:50px;
+	color:white;
 }
 
 ul, li {
@@ -226,7 +227,7 @@ button {
 
 }
 #restaurant-name {
-  color: #f18200;
+/*  color: #f18200;*/
   font-family: Arial,sans-serif;
   font-size: 20pt;
   font-weight: 200;
