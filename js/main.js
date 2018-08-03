@@ -3,6 +3,9 @@ let restaurants,
   cuisines
 var newMap
 var markers = []
+//used for favorite button
+const filledFavImage = '/heart-solid.svg';
+const borderFavImage = '/heart-open.svg';
 
 
 DBHelper.loadIDB();
@@ -14,6 +17,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
   fetchNeighborhoods();
   fetchCuisines();
+});
+
+
+//handle clicking on favorites
+var baseSelector = '#restaurants-list'; // selector for the container for the variable content
+var base = document.querySelector(baseSelector);
+base.addEventListener('click', function(event) {
+const clickedItem = event.target
+if (event.target.className == 'favorite')
+   {
+    const restaurant_id = clickedItem.getAttribute('restaurant_id');
+    //get src and strip everything but the last / and name for comparison
+    let currentSrc = clickedItem.src;
+    let index = currentSrc.lastIndexOf('/');
+    currentSrc = currentSrc.substring(index);
+    //determine what the new status should be
+    const favorite = (currentSrc == filledFavImage) ? 'false' : 'true';
+    clickedItem.src = (favorite === 'false') ? borderFavImage : filledFavImage;
+    //update local loadIDB
+    //todo, update server with favorite/not favorite
+  }
 });
 
 /**
@@ -95,26 +119,6 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
    updateRestaurants();
  }
 
- /*
-window.initMap = () => {
-  let loc = {
-    lat: 40.722216,
-    lng: -73.987501
-  };
-  self.map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: loc,
-    scrollwheel: false
-  });
-  updateRestaurants();
-
-
-     google.maps.event.addListenerOnce(self.map, 'idle', () => {
-       document.getElementsByTagName('iframe')[0].title = "Google Maps";
-       document.getElementsByTagName('iframe')[0].setAttribute("aria-role","application");
-     });
-
-}*/
 
 /**
  * Update page and map for current restaurants.
@@ -177,10 +181,27 @@ createRestaurantHTML = (restaurant) => {
   li.append(picture);
 
 
+
+//handle favorites
+
+  const fav = document.createElement('button');
+  fav.className = 'favorite_button';
+  const favorite =   (restaurant.is_favorite === 'true') ? filledFavImage : borderFavImage;
+  const favImg = document.createElement('img');
+  const favorite_alt =   (restaurant.is_favorite === 'true') ? "Favorite" : "Not Favorite";
+  favImg.setAttribute("alt",favorite_alt);
+  favImg.setAttribute("role","button");
+  favImg.className = 'favorite';
+  favImg.setAttribute("restaurant_id",restaurant.id);
+
+  favImg.src = favorite;
+  fav.appendChild(favImg);
+
   const name = document.createElement('h2');
   name.className = 'restaurantName';
   name.innerHTML = restaurant.name;
   name.id = restaurant.name;
+  name.appendChild(fav);
   li.append(name);
 
   const neighborhood = document.createElement('p');
@@ -216,13 +237,3 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     }
   });
 }
-/* addMarkersToMap = (restaurants = self.restaurants) => {
-  restaurants.forEach(restaurant => {
-    // Add marker to the map
-    const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
-    google.maps.event.addListener(marker, 'click', () => {
-      window.location.href = marker.url
-    });
-    self.markers.push(marker);
-  });
-} */

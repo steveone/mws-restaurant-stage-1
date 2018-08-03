@@ -66,6 +66,19 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   text-align: center;
   text-transform: uppercase;
 }
+
+.favorite_button {
+	padding: 0;
+	border: none;
+	background: none;
+	height: 25px;
+	width:25px;
+	margin-top:5px;
+	margin-left:15px;
+	background-color: white;
+	float:left;
+}
+
 /* ====================== Navigation ====================== */
 nav {
   width: 100%;
