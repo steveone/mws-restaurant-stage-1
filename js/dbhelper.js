@@ -11,6 +11,27 @@
 
 class DBHelper {
 
+  static pushOnNetworkReconnect(){
+    console.log("in pushOnNetworkReconnect");
+    dbPromise.then(function(db) {
+     return db.transaction('keyval')
+       .objectStore('keyval').getAll();
+    }).then(function(restaurants) {
+      console.log("about to check restaurants for flag");
+    restaurants.forEach(function(restaurant){
+            console.log(restaurant);
+            if (restaurant.offLineFlag == true){
+              const restaurant_id = restaurant.id;
+              const favorite = restaurant.is_favorite;
+              console.log("updating " + restaurant_id + " now that we are online again");
+            restaurant = {...restaurant, is_favorite: favorite, offLineFlag:false};
+            DBHelper.addOrUpdateDB(restaurant);
+            return;
+          }
+          })
+    })
+  }
+
 
   static networkStatus(){
     return (networkStatus === true) ? 'Online' : 'Offline';
@@ -21,6 +42,7 @@ class DBHelper {
        console.log("We are back online, yeah!");
        networkStatus = true;
        console.log("Checking if any updates are pending");
+       DBHelper.pushOnNetworkReconnect();
      }
      else {
        console.log("We just went offline, check your network properties");
@@ -58,13 +80,15 @@ static updateFavorite(id,favorite) {
   console.log("got id " + id )
   DBHelper.fetchRestaurantById(id, ((error, restaurant) => {
     console.log("get restauraunt by id returned " + restaurant);
-    restaurant.is_favorite = favorite;
+//    restaurant.is_favorite = favorite;
     console.log("network status is " + networkStatus);
     if (networkStatus === false) {
-      console.log("offline");
-      restaurant = {...restaurant, offLineFlag:true};
+      console.log("offline, updating offline flag");
+      restaurant = {...restaurant, offLineFlag:true, is_favorite: favorite};
+      DBHelper.addOrUpdateDB(restaurant);
       return;
     }
+    restaurant = {...restaurant, is_favorite: favorite};
     console.log(restaurant);
     DBHelper.addOrUpdateDB(restaurant);
     DBHelper.updateRestaurantById(restaurant);
