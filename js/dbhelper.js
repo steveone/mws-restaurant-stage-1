@@ -7,29 +7,69 @@
 
  let connection = navigator.connection
  let type = connection.downlink;
- let networkStatus = 'True';
+ let networkStatus = true;
 
 class DBHelper {
 
 
   static networkStatus(){
-    return (networkStatus == 'True') ? 'Online' : 'Offline';
+    return (networkStatus === true) ? 'Online' : 'Offline';
   }
 
    static updateConnectionStatus() {
      if ((type == 0) && (connection.downlink > 0)) {
        console.log("We are back online, yeah!");
+       networkStatus = true;
+       console.log("Checking if any updates are pending");
      }
      else {
        console.log("We just went offline, check your network properties");
-       let networkStatus = 'False';
+       networkStatus = false;
 
      }
      console.log("Connection type changed from " + type + " to " + connection.downlink);
      type = connection.downlink;
-     let networkStatus = 'True';
    }
 
+
+   static updateRestaurantById(restaurant) {
+     const restaurant_id = restaurant.id;
+     const startUrl = DBHelper.DATABASE_URL_RESTAURANTS + restaurant_id;
+     const endPoint = startUrl + '/?is_favorite=' + restaurant.is_favorite;
+     fetch(endPoint, {method: "POST"})
+     .then(response => response.json())
+     .then(restaurants => {
+       //if good do nothing?
+     })
+     .then(data => {
+     callback(null,data)})
+     //if error occurs with fetch, fall back to data stored in indexeddb
+     .catch(error => {
+       dbPromise.then(function(db) {
+        return db.transaction('keyval')
+          .objectStore('keyval').getAll();
+       })
+       .catch(error =>{
+         callback(error,null)});
+       });
+   }
+
+static updateFavorite(id,favorite) {
+  console.log("got id " + id )
+  DBHelper.fetchRestaurantById(id, ((error, restaurant) => {
+    console.log("get restauraunt by id returned " + restaurant);
+    restaurant.is_favorite = favorite;
+    console.log("network status is " + networkStatus);
+    if (networkStatus === false) {
+      console.log("offline");
+      restaurant = {...restaurant, offLineFlag:true};
+      return;
+    }
+    console.log(restaurant);
+    DBHelper.addOrUpdateDB(restaurant);
+    DBHelper.updateRestaurantById(restaurant);
+  }))
+}
 
 static loadIDB() {
   console.log("loading idb");

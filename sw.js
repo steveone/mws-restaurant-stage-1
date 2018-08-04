@@ -52,6 +52,8 @@ self.addEventListener('install', function(event) {
         '/img/undefined-400_medium.jpg',
         '/img/undefined-800_large.jpg',
         '/manifest.json',
+        '/heart-solid.svg',
+        '/heart-open.svg',
         'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
         'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff'
       ]);

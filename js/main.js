@@ -33,9 +33,10 @@ if (event.target.className == 'favorite')
     let index = currentSrc.lastIndexOf('/');
     currentSrc = currentSrc.substring(index);
     //determine what the new status should be
-    const favorite = (currentSrc == filledFavImage) ? 'false' : 'true';
-    clickedItem.src = (favorite === 'false') ? borderFavImage : filledFavImage;
+    const favorite = (currentSrc == filledFavImage) ? false : true;
+    clickedItem.src = (favorite === false) ? borderFavImage : filledFavImage;
     //update local loadIDB
+    DBHelper.updateFavorite(restaurant_id,favorite);
     //todo, update server with favorite/not favorite
   }
 });
