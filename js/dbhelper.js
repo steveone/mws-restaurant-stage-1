@@ -5,7 +5,30 @@
  var dbPromise;
  var dbPromise_reviews;
 
+ let connection = navigator.connection
+ let type = connection.downlink;
+ let networkStatus = 'True';
+
 class DBHelper {
+
+
+  static networkStatus(){
+    return (networkStatus == 'True') ? 'Online' : 'Offline';
+  }
+
+   static updateConnectionStatus() {
+     if ((type == 0) && (connection.downlink > 0)) {
+       console.log("We are back online, yeah!");
+     }
+     else {
+       console.log("We just went offline, check your network properties");
+       let networkStatus = 'False';
+
+     }
+     console.log("Connection type changed from " + type + " to " + connection.downlink);
+     type = connection.downlink;
+     let networkStatus = 'True';
+   }
 
 
 static loadIDB() {
@@ -312,15 +335,10 @@ static get DATABASE_URL_REVIEWS() {
      marker.addTo(newMap);
    return marker;
  }
- /* static mapMarkerForRestaurant(restaurant, map) {
-   const marker = new google.maps.Marker({
-     position: restaurant.latlng,
-     title: restaurant.name,
-     url: DBHelper.urlForRestaurant(restaurant),
-     map: map,
-     animation: google.maps.Animation.DROP}
-   );
-   return marker;
- } */
+
 
 }
+
+//used to setup listener for network change events
+
+connection.addEventListener('change', DBHelper.updateConnectionStatus);

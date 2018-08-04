@@ -1,7 +1,9 @@
-var staticCacheName = "mws-restaurant";
-var allCaches = [
+let staticCacheName = "mws-restaurant";
+let allCaches = [
   staticCacheName
 ];
+
+
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
