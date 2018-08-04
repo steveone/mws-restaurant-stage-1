@@ -1,5 +1,8 @@
 let restaurant;
-var map;
+let map;
+const filledFavImage = '/heart-solid.svg';
+const borderFavImage = '/heart-open.svg';
+
 
 DBHelper.loadIDB();
 /**
@@ -43,27 +46,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
      }
    })
  }
- /*
-window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-    }
-    google.maps.event.addListenerOnce(self.map, 'idle', () => {
-      document.getElementsByTagName('iframe')[0].title = "Google Maps";
-      document.getElementsByTagName('iframe')[0].setAttribute("aria-role","application");
-    });
-  });
-}
-*/
+
 
 /**
  * Get current restaurant from page URL.
@@ -111,13 +94,54 @@ fetchRestaurantReviewsFromURL = (callback) => {
 }
 
 
+//handle clicking on favorites
+var baseSelector = '#restaurant-container'; // selector for the container for the variable content
+var base = document.querySelector(baseSelector);
+base.addEventListener('click', function(event) {
+const clickedItem = event.target
+if (event.target.className == 'favorite')
+   {
+    const restaurant_id = clickedItem.getAttribute('restaurant_id');
+    //get src and strip everything but the last / and name for comparison
+    let currentSrc = clickedItem.src;
+    let index = currentSrc.lastIndexOf('/');
+    currentSrc = currentSrc.substring(index);
+    //determine what the new status should be
+    const favorite = (currentSrc == filledFavImage) ? false : true;
+    clickedItem.src = (favorite === false) ? borderFavImage : filledFavImage;
+    //update local loadIDB
+    console.log("calling update fav " + restaurant_id);
+    DBHelper.updateFavorite(restaurant_id,favorite);
+    console.log("After update favorite");
+    //todo, update server with favorite/not favorite
+  }
+});
+
 /**
  * Create restaurant HTML and add it to the webpage
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
+
+  //is it a favorite or not
+  const fav = document.createElement('button');
+  fav.className = 'favorite_button';
+  const favorite =   (restaurant.is_favorite === 'true') ? filledFavImage : borderFavImage;
+  const favImg = document.createElement('img');
+  const favorite_alt =   (restaurant.is_favorite === true) ? "Favorite" : "Not Favorite";
+  favImg.setAttribute("alt",favorite_alt);
+  favImg.setAttribute("role","button");
+  favImg.className = 'favorite';
+  favImg.setAttribute("restaurant_id",restaurant.id);
+
+  favImg.src = favorite;
+  fav.appendChild(favImg);
+
+
   const name = document.getElementById('restaurant-name');
   name.className = 'restaurantName';
+
   name.innerHTML = restaurant.name;
+  name.appendChild(fav);
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;

@@ -38,6 +38,7 @@ class DBHelper {
   }
 
    static updateConnectionStatus() {
+//     console.log("updating connection status");
      if ((type == 0) && (connection.downlink > 0)) {
        console.log("We are back online, yeah!");
        networkStatus = true;
@@ -82,6 +83,7 @@ static updateFavorite(id,favorite) {
     console.log("get restauraunt by id returned " + restaurant);
 //    restaurant.is_favorite = favorite;
     console.log("network status is " + networkStatus);
+    DBHelper.networkStatus();
     if (networkStatus === false) {
       console.log("offline, updating offline flag");
       restaurant = {...restaurant, offLineFlag:true, is_favorite: favorite};
