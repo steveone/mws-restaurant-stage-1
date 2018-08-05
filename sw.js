@@ -10,6 +10,7 @@ self.addEventListener('install', function(event) {
     //open the cache and save files needed for the project
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
+        '/sw.js',
         '/index.html',
         '/js/main.js',
         '/css/styles.css',
@@ -88,6 +89,7 @@ self.addEventListener('fetch', function(event) {
 
 //console.log(requestUrl);
 //console.log("matched location.origin");
+console.log("requestURL.pathname = " + requestUrl.pathname);
     if (requestUrl.pathname === '/') {
       console.log("Requested "/" so respond with cache")
       event.respondWith(
@@ -96,9 +98,12 @@ self.addEventListener('fetch', function(event) {
       })
     );
   }
-
   else if(requestUrl.pathname.startsWith("/restaurant.html")){
     event.respondWith(caches.match('/restaurant.html'));
+    return;
+  }
+  else if(requestUrl.pathname.startsWith("/sw.js")){
+    event.respondWith(caches.match('/sw.js'));
     return;
   }
 

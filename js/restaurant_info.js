@@ -101,6 +101,7 @@ base.addEventListener('click', function(event) {
 const clickedItem = event.target
 if (event.target.className == 'favorite')
    {
+    event.preventDefault();
     const restaurant_id = clickedItem.getAttribute('restaurant_id');
     //get src and strip everything but the last / and name for comparison
     let currentSrc = clickedItem.src;
@@ -125,6 +126,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   //is it a favorite or not
   const fav = document.createElement('button');
   fav.className = 'favorite_button';
+  console.log("fav yes/no " + restaurant.is_favorite);
   const favorite =   (restaurant.is_favorite === 'true') ? filledFavImage : borderFavImage;
   const favImg = document.createElement('img');
   const favorite_alt =   (restaurant.is_favorite === true) ? "Favorite" : "Not Favorite";
@@ -132,7 +134,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   favImg.setAttribute("role","button");
   favImg.className = 'favorite';
   favImg.setAttribute("restaurant_id",restaurant.id);
-
+  console.log(favorite);
   favImg.src = favorite;
   fav.appendChild(favImg);
 

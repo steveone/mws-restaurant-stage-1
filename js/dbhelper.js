@@ -19,13 +19,15 @@ class DBHelper {
     }).then(function(restaurants) {
       console.log("about to check restaurants for flag");
     restaurants.forEach(function(restaurant){
-            console.log(restaurant);
             if (restaurant.offLineFlag == true){
+              console.log(restaurant);
+              console.log(restaurant.id + " being updated");
               const restaurant_id = restaurant.id;
               const favorite = restaurant.is_favorite;
               console.log("updating " + restaurant_id + " now that we are online again");
             restaurant = {...restaurant, is_favorite: favorite, offLineFlag:false};
             DBHelper.addOrUpdateDB(restaurant);
+            DBHelper.updateRestaurantById(restaurant);
             return;
           }
           })
@@ -56,13 +58,14 @@ class DBHelper {
 
 
    static updateRestaurantById(restaurant) {
-     const restaurant_id = restaurant.id;
-     const startUrl = DBHelper.DATABASE_URL_RESTAURANTS + restaurant_id;
+     const id = restaurant.id;
+     const startUrl = DBHelper.DATABASE_URL_RESTAURANTS + id;
      const endPoint = startUrl + '/?is_favorite=' + restaurant.is_favorite;
      fetch(endPoint, {method: "POST"})
      .then(response => response.json())
      .then(restaurants => {
        //if good do nothing?
+       console.log("do nothing");
      })
      .then(data => {
      callback(null,data)})
@@ -82,6 +85,7 @@ static updateFavorite(id,favorite) {
   DBHelper.fetchRestaurantById(id, ((error, restaurant) => {
     console.log("get restauraunt by id returned " + restaurant);
 //    restaurant.is_favorite = favorite;
+    DBHelper.networkStatus();
     console.log("network status is " + networkStatus);
     DBHelper.networkStatus();
     if (networkStatus === false) {
@@ -91,7 +95,6 @@ static updateFavorite(id,favorite) {
       return;
     }
     restaurant = {...restaurant, is_favorite: favorite};
-    console.log(restaurant);
     DBHelper.addOrUpdateDB(restaurant);
     DBHelper.updateRestaurantById(restaurant);
   }))
@@ -124,6 +127,7 @@ static loadIDB() {
 
 
 static addOrUpdateDB(restaurant){
+  console.log("in addorupdatedb working on " + restaurant.id);
   // set "foo" to be "bar" in "keyval"
   dbPromise.then(function(db) {
     var tx = db.transaction('keyval', 'readwrite');

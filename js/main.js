@@ -27,6 +27,7 @@ base.addEventListener('click', function(event) {
 const clickedItem = event.target
 if (event.target.className == 'favorite')
    {
+    event.preventDefault();
     const restaurant_id = clickedItem.getAttribute('restaurant_id');
     //get src and strip everything but the last / and name for comparison
     let currentSrc = clickedItem.src;
@@ -180,8 +181,6 @@ createRestaurantHTML = (restaurant) => {
   const picture = document.createElement('picture');
   picture.innerHTML = img;
   li.append(picture);
-
-
 
 //handle favorites
 
