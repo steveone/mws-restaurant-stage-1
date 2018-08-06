@@ -79,6 +79,24 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 	float:left;
 }
 
+.reviewBtn {
+	margin-left:20px;
+}
+
+.inputDiv {
+	width:100%;
+}
+
+.inputLabel {
+	border: 2px solid lightgray;
+	margin-left: 10px;
+}
+
+#reviewComment {
+	border: 2px solid lightgray;
+	margin-left: 10px;
+}
+
 /* ====================== Navigation ====================== */
 nav {
   width: 100%;

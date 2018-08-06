@@ -4,6 +4,7 @@ const filledFavImage = '/heart-solid.svg';
 const borderFavImage = '/heart-open.svg';
 
 
+
 DBHelper.loadIDB();
 /**
  * Initialize Google map, called from HTML.
@@ -47,6 +48,65 @@ document.addEventListener('DOMContentLoaded', (event) => {
    })
  }
 
+
+openReviewForm  = (id) => {
+  console.log("should open review form here");
+  const reviewForm = document.getElementById('reviewForm');
+  //if the form is already open, clear it and start a fresh onkeyup
+  //we may want to leave the current form in place in the future
+  reviewForm.innerHTML = "";
+  const form = document.createElement('form');
+
+  const div1 = document.createElement('div');
+  div1.className = 'inputDiv';
+  const inputLabel = document.createElement('label');
+  inputLabel.className = 'label';
+  inputLabel.innerHTML = 'Your name:';
+  inputLabel.setAttribute('for','nameInput');
+  const input = document.createElement('input');
+  input.className = 'inputLabel';
+  input.id = 'nameInput';
+  input.type = 'text';
+  form.appendChild(div1);
+  div1.appendChild(inputLabel);
+  div1.appendChild(input);
+
+//form element for rating to be fixed
+const div2 = document.createElement('div');
+div2.className = 'inputDiv';
+const inputRating = document.createElement('label');
+inputRating.innerHTML = 'Rating (1-4):';
+inputRating.setAttribute('for','rating');
+inputRating.className = 'label';
+const inputRatingEntry = document.createElement('input');
+inputRatingEntry.className = 'inputLabel';
+inputRatingEntry.id = 'rating';
+inputRatingEntry.type = 'text';
+form.appendChild(div2);
+div2.appendChild(inputRating);
+div2.appendChild(inputRatingEntry);
+
+  const commentLabel = document.createElement('label');
+  commentLabel.innerHTML = 'Comment:'
+  commentLabel.setAttribute('for', 'reviewComment');
+  commentLabel.className = 'inpputLabel';
+  const textarea = document.createElement('textarea');
+  textarea.setAttribute('rows','10');
+  textarea.setAttribute('cols','50');
+  textarea.className = 'inputLabel';
+  textarea.id = 'reviewComment';
+  form.appendChild(commentLabel);
+  form.appendChild(textarea);
+  const submitCommentBtn = document.createElement('button');
+  submitCommentBtn.innerHTML = 'Submit Review';
+  submitCommentBtn.id = 'submitReview';
+  form.appendChild(submitCommentBtn);
+  const clearCommentBtn = document.createElement('button');
+  clearCommentBtn.innerHTML = 'Clear Review';
+  clearCommentBtn.id = 'clearReview'
+  form.appendChild(clearCommentBtn);
+  reviewForm.appendChild(form);
+}
 
 /**
  * Get current restaurant from page URL.
@@ -99,8 +159,8 @@ var baseSelector = '#restaurant-container'; // selector for the container for th
 var base = document.querySelector(baseSelector);
 base.addEventListener('click', function(event) {
 const clickedItem = event.target
-if (event.target.className == 'favorite')
-   {
+console.log(event.target.className);
+if (event.target.className == 'favorite'){
     event.preventDefault();
     const restaurant_id = clickedItem.getAttribute('restaurant_id');
     //get src and strip everything but the last / and name for comparison
@@ -118,6 +178,35 @@ if (event.target.className == 'favorite')
   }
 });
 
+//handle clicking on add review btn
+var baseSelector = '#reviews-container'; // selector for the container for the variable content
+var base = document.querySelector(baseSelector);
+base.addEventListener('click', function(event){
+
+const restaurant_id = getParameterByName('id');
+const clickedItem = event.target
+if (event.target.className == 'reviewBtn'){
+    event.preventDefault();
+    console.log("review btn clicked " + restaurant_id);
+    openReviewForm(restaurant_id);
+    }
+else if (event.target.id == 'clearReview'){
+  event.preventDefault();
+  console.log("clearing review entries")
+  openReviewForm(id);
+  }
+else if (event.target.id == 'submitReview'){
+  event.preventDefault();
+  let submission = {}
+  submission.restaurant_id = restaurant_id;
+  submission.rating = document.getElementById('rating').value;
+  submission.username = document.getElementById('nameInput').value;
+  submission.reviewText = document.getElementById('reviewComment').value;
+  submission.date = new Date();
+  console.log("time to submit the review")
+  console.log(submission);
+  }
+});
 /**
  * Create restaurant HTML and add it to the webpage
  */
@@ -194,7 +283,19 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
+  const newReviewBtn = document.createElement('button');
+  newReviewBtn.innerHTML= 'Add Review';
+  newReviewBtn.setAttribute("alt","Add Review");
+  newReviewBtn.setAttribute("role","button");
+  newReviewBtn.className = 'reviewBtn';
+  title.appendChild(newReviewBtn);
   container.appendChild(title);
+
+  const reviewForm = document.createElement('p');
+  reviewForm.innerHtml = 'Review Form';
+  reviewForm.className = 'reviewForm';
+  reviewForm.id = 'reviewForm';
+  container.appendChild(reviewForm);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
@@ -225,7 +326,7 @@ createReviewHTML = (review,i) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  date.innerHTML = new Date(review.createdAt).toDateString();
   li.appendChild(date);
 
   const rating = document.createElement('p');
