@@ -36,7 +36,7 @@ class DBHelper {
 
 
   static networkStatus(){
-    return (networkStatus === true) ? 'Online' : 'Offline';
+    return (networkStatus === true) ? true : false;
   }
 
    static updateConnectionStatus() {
@@ -83,11 +83,13 @@ class DBHelper {
 static updateFavorite(id,favorite) {
   console.log("got id " + id )
   DBHelper.fetchRestaurantById(id, ((error, restaurant) => {
-    console.log("get restauraunt by id returned " + restaurant);
-//    restaurant.is_favorite = favorite;
+    console.log("got restauraunt by id returned");
+    console.log(restaurant);
+    restaurant.is_favorite = favorite;
+//    DBHelper.networkStatus();
+//    console.log("network status is " + networkStatus);
     DBHelper.networkStatus();
     console.log("network status is " + networkStatus);
-    DBHelper.networkStatus();
     if (networkStatus === false) {
       console.log("offline, updating offline flag");
       restaurant = {...restaurant, offLineFlag:true, is_favorite: favorite};
@@ -127,16 +129,22 @@ static loadIDB() {
 
 
 static addOrUpdateDB(restaurant){
-  console.log("in addorupdatedb working on " + restaurant.id);
+  //console.log("in addorupdatedb working on " + restaurant.id);
   // set "foo" to be "bar" in "keyval"
   dbPromise.then(function(db) {
+    //console.log("going to update with the following");
+    //console.log(restaurant);
     var tx = db.transaction('keyval', 'readwrite');
     var keyValStore = tx.objectStore('keyval');
+    //console.log("trying to update restaurant with id " + restaurant.id)
     keyValStore.put(restaurant, restaurant.id);
     return tx.complete;
   }).then(function() {
-    //console.log(`Added ${restaurant.id} - ${restaurant} to keyval`);
-  });
+    //console.log('Added ' + restaurant.id + ' to keyval');
+    //console.log(restaurant);
+  }).catch(function(error) {
+    console.log("error occured during update " + error);
+  })
 }
 
 static addOrUpdateDB_review(review){
@@ -204,9 +212,7 @@ static get DATABASE_URL_REVIEWS() {
     fetch(DBHelper.DATABASE_URL_REVIEWS)
     .then(response => response.json())
     .then(reviews => {
-//      console.log(reviews);
       reviews.forEach(function(review){
-//       console.log(review);
         DBHelper.addOrUpdateDB_review(review)
       })
       return reviews;
@@ -216,8 +222,6 @@ static get DATABASE_URL_REVIEWS() {
     })
     //if error occurs with fetch, fall back to data stored in indexeddb
     .catch(error => {
-  //      console.log('in catch inside dbhelper')
-  //      console.log(dbPromise);
       dbPromise_reviews.then(function(db) {
        return db.transaction('keyval')
          .objectStore('keyval').getAll();
