@@ -149,7 +149,8 @@ fetchRestaurantReviewsFromURL = (callback) => {
             return;
           }
           fillReviewsHTML();
-      });
+      })
+
     }
 }
 
@@ -178,11 +179,12 @@ if (event.target.className == 'favorite'){
   }
 });
 
+
 //handle clicking on add review btn
 var baseSelector = '#reviews-container'; // selector for the container for the variable content
 var base = document.querySelector(baseSelector);
-base.addEventListener('click', function(event){
 
+base.addEventListener('click', function(event){
 const restaurant_id = getParameterByName('id');
 const clickedItem = event.target
 if (event.target.className == 'reviewBtn'){
@@ -193,18 +195,19 @@ if (event.target.className == 'reviewBtn'){
 else if (event.target.id == 'clearReview'){
   event.preventDefault();
   console.log("clearing review entries")
-  openReviewForm(id);
+  openReviewForm(restaurant_id);
   }
 else if (event.target.id == 'submitReview'){
   event.preventDefault();
   let submission = {}
   submission.restaurant_id = restaurant_id;
   submission.rating = document.getElementById('rating').value;
-  submission.username = document.getElementById('nameInput').value;
-  submission.reviewText = document.getElementById('reviewComment').value;
+  submission.name = document.getElementById('nameInput').value;
+  submission.comments = document.getElementById('reviewComment').value;
   submission.date = new Date();
   console.log("time to submit the review")
   console.log(submission);
+  DBHelper.submitNewreviewToServer(submission);
   }
 });
 /**

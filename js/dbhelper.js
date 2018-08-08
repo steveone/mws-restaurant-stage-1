@@ -11,6 +11,20 @@
 
 class DBHelper {
 
+
+  /**
+   * Database URL.
+   * Change this to restaurants.json file location on your server.
+   */
+  static get DATABASE_URL_RESTAURANTS() {
+    const port = 1337; // Change this to your server port
+    return `http://localhost:${port}/restaurants/`;
+  }
+  static get DATABASE_URL_REVIEWS() {
+    const port = 1337; // Change this to your server port
+    return `http://localhost:${port}/reviews/`;
+  }
+
   static pushOnNetworkReconnect(){
     console.log("in pushOnNetworkReconnect");
     dbPromise.then(function(db) {
@@ -35,6 +49,8 @@ class DBHelper {
   }
 
 
+
+
   static networkStatus(){
     return (networkStatus === true) ? true : false;
   }
@@ -56,6 +72,18 @@ class DBHelper {
      type = connection.downlink;
    }
 
+
+   static  submitNewreviewToServer(newReview) {
+    const url =  DBHelper.DATABASE_URL_REVIEWS;
+    fetch(url, {
+      method: 'post',
+      body: JSON.stringify(newReview)
+    }).then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      console.log("sent new review to server, response was " + data );
+    });
+  }
 
    static updateRestaurantById(restaurant) {
      const id = restaurant.id;
@@ -160,18 +188,7 @@ static addOrUpdateDB_review(review){
   });
 }
 
-/**
- * Database URL.
- * Change this to restaurants.json file location on your server.
- */
-static get DATABASE_URL_RESTAURANTS() {
-  const port = 1337; // Change this to your server port
-  return `http://localhost:${port}/restaurants/`;
-}
-static get DATABASE_URL_REVIEWS() {
-  const port = 1337; // Change this to your server port
-  return `http://localhost:${port}/reviews/`;
-}
+
   /**
    * Fetch all restaurants.
    */
@@ -205,8 +222,6 @@ static get DATABASE_URL_REVIEWS() {
       });
   }
 
-
-
   static fetchRestaurant_reviews(callback) {
     console.log('about to try fetching')
     fetch(DBHelper.DATABASE_URL_REVIEWS)
@@ -239,7 +254,7 @@ static get DATABASE_URL_REVIEWS() {
   /**
    * Fetch a restaurant review by its restaurant ID.
    */
-  static fetchReviewsByRestaurantId(id, callback) {
+/*  static fetchReviewsByRestaurantId(id, callback) {
     // fetch all restaurants with proper error handling.
     DBHelper.fetchRestaurant_reviews((error, reviews) => {
       if (error) {
@@ -253,6 +268,27 @@ static get DATABASE_URL_REVIEWS() {
         }
       }
     });
+  }*/
+
+  static fetchReviewsByRestaurantId(id, callback) {
+      const url = DBHelper.DATABASE_URL_REVIEWS + '?restaurant_id=' + id;
+      console.log(url);
+      fetch(url)
+      .then(response => response.json())
+      .then(reviews => {
+          if (!reviews) {
+          callback(error, null);
+        } else {
+          reviews.forEach(function(review){
+            DBHelper.addOrUpdateDB_review(review);
+          })
+          callback(null,reviews);
+        }
+    })
+    .catch((error) => {
+      console.log("An error occurred getting review for id " + id);
+      console.log("Error was " + error);
+  })
   }
 
   /**

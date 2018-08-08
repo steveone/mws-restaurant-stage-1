@@ -89,9 +89,9 @@ self.addEventListener('fetch', function(event) {
 
 //console.log(requestUrl);
 //console.log("matched location.origin");
-console.log("requestURL.pathname = " + requestUrl.pathname);
+//console.log("requestURL.pathname = " + requestUrl.pathname);
     if (requestUrl.pathname === '/') {
-      console.log("Requested "/" so respond with cache")
+      //console.log("Requested "/" so respond with cache")
       event.respondWith(
       caches.match("index.html").then(function(response) {
       return response || fetch(event.request);
