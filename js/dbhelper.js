@@ -75,6 +75,16 @@ class DBHelper {
 
    static  submitNewreviewToServer(newReview) {
     const url =  DBHelper.DATABASE_URL_REVIEWS;
+    DBHelper.networkStatus();
+    console.log("network status is " + networkStatus);
+    if (networkStatus === false) {
+      console.log("offline, updating offline flag");
+      const temp_id = new Date().getTime();
+      newReview = {...newReview, offLineFlag:true, id:temp_id};
+      DBHelper.addOrUpdateDB_review(newReview);
+      return;
+    }
+    //if we aren not offline, we can submit to the server
     fetch(url, {
       method: 'post',
       body: JSON.stringify(newReview)
@@ -82,7 +92,10 @@ class DBHelper {
       return response.json();
     }).then(function(data) {
       console.log("sent new review to server, response was " + data );
-    });
+    }).catch(error => {
+      console.log("error submitting review to server");
+    })
+    //need a catch to handle being offline here
   }
 
    static updateRestaurantById(restaurant) {
@@ -180,7 +193,8 @@ static addOrUpdateDB_review(review){
   dbPromise_reviews.then(function(db) {
     var tx = db.transaction('keyval', 'readwrite');
     var keyValStore = tx.objectStore('keyval');
-//    console.log(review);
+    console.log("about to save to db");
+    console.log(review);
     keyValStore.put(review, review.id);
     return tx.complete;
   }).then(function() {
@@ -288,6 +302,17 @@ static addOrUpdateDB_review(review){
     .catch((error) => {
       console.log("An error occurred getting review for id " + id);
       console.log("Error was " + error);
+      console.log("we will load the reviews from the local database instead");
+      dbPromise_reviews.then(function(db) {
+       return db.transaction('keyval')
+         .objectStore('keyval').getAll();
+      }).then(function(data) {
+        let results = data.filter(r => r.restaurant_id == id);
+        callback(null,results);
+      })
+
+
+
   })
   }
 

@@ -200,6 +200,9 @@ else if (event.target.id == 'clearReview'){
 else if (event.target.id == 'submitReview'){
   event.preventDefault();
   let submission = {}
+  //while submitting the id field is not needed, it keeps the returned json results in the same order
+  //which increases readability
+  submission.id = '';
   submission.restaurant_id = restaurant_id;
   submission.rating = document.getElementById('rating').value;
   submission.name = document.getElementById('nameInput').value;
