@@ -360,7 +360,7 @@ createReviewHTML = (review,i) => {
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const div = document.createElement('div');
-  li.innerHTML = restaurant.name;
+  div.innerHTML = restaurant.name;
   breadcrumb.appendChild(div);
 }
 
