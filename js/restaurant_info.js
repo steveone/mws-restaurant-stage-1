@@ -210,7 +210,7 @@ else if (event.target.id == 'submitReview'){
   submission.date = new Date();
   console.log("time to submit the review")
   console.log(submission);
-  DBHelper.submitNewreviewToServer(submission);
+  DBHelper.submitNewReviewToServer(submission);
   }
 });
 /**

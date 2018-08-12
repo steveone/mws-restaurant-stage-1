@@ -25,30 +25,74 @@ class DBHelper {
     return `http://localhost:${port}/reviews/`;
   }
 
-  static pushOnNetworkReconnect(){
-    console.log("in pushOnNetworkReconnect");
-    dbPromise.then(function(db) {
-     return db.transaction('keyval')
-       .objectStore('keyval').getAll();
-    }).then(function(restaurants) {
-      console.log("about to check restaurants for flag");
-    restaurants.forEach(function(restaurant){
-            if (restaurant.offLineFlag == true){
-              console.log(restaurant);
-              console.log(restaurant.id + " being updated");
-              const restaurant_id = restaurant.id;
-              const favorite = restaurant.is_favorite;
-              console.log("updating " + restaurant_id + " now that we are online again");
-            restaurant = {...restaurant, is_favorite: favorite, offLineFlag:false};
-            DBHelper.addOrUpdateDB(restaurant);
-            DBHelper.updateRestaurantById(restaurant);
-            return;
-          }
-          })
+
+static pushFavoritesOnReconnect(){
+  dbPromise.then(function(db) {
+   return db.transaction('keyval')
+     .objectStore('keyval').getAll();
+  }).then(function(restaurants) {
+    console.log("about to check restaurants for flag");
+  restaurants.forEach(function(restaurant){
+          if (restaurant.offLineFlag == true){
+            console.log(restaurant);
+            console.log(restaurant.id + " being updated");
+            const restaurant_id = restaurant.id;
+            const favorite = restaurant.is_favorite;
+            console.log("updating " + restaurant_id + " now that we are online again");
+          restaurant = {...restaurant, is_favorite: favorite, offLineFlag:false};
+          DBHelper.addOrUpdateDB(restaurant);
+          DBHelper.updateRestaurantById(restaurant);
+          return;
+        }
+        })
+  })
+}
+
+
+static deleteReviewFromIDB(id) {
+  dbPromise_reviews.then(function(db) {
+    return db.transaction('keyval','readwrite')
+      .objectStore('keyval').delete(id);
+    }).then(function() {
+      console.log('deleted item from idb');
+    }).catch(error => {
+      console.log("error deleting from id " + error);
     })
   }
 
 
+
+static pushNewReviewsOnReconnect(){
+  dbPromise_reviews.then(function(db) {
+   return db.transaction('keyval')
+     .objectStore('keyval').getAll();
+  }).then(function(reviews) {
+    console.log("about to check reviews for flag");
+    reviews.forEach(function(review){
+          if (review.offLineFlag == true){
+            //delete from idb, we are saving to the server.
+            const oldReviewID = review.id;
+            review.id = '';
+            console.log("adding the following review to server");
+          review = {...review, offLineFlag:false};
+          console.log(review);
+          DBHelper.submitNewReviewToServer(review);
+          DBHelper.deleteReviewFromIDB(oldReviewID);
+
+          //after a submission from the server, remove from the idb
+          //so it can have the udpated ID from the server
+          return;
+        }
+        })
+  })
+}
+
+
+  static pushOnNetworkReconnect(){
+    console.log("in pushOnNetworkReconnect");
+    DBHelper.pushFavoritesOnReconnect();
+    DBHelper.pushNewReviewsOnReconnect();
+  }
 
 
   static networkStatus(){
@@ -73,7 +117,7 @@ class DBHelper {
    }
 
 
-   static  submitNewreviewToServer(newReview) {
+   static  submitNewReviewToServer(newReview) {
     const url =  DBHelper.DATABASE_URL_REVIEWS;
     DBHelper.networkStatus();
     console.log("network status is " + networkStatus);
@@ -91,9 +135,12 @@ class DBHelper {
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
+      console.log(data.id + ' = ' + newReview.id);
+      //put the returned review with it's new id in indexedb
+      DBHelper.addOrUpdateDB_review(data);
       console.log("sent new review to server, response was " + data );
     }).catch(error => {
-      console.log("error submitting review to server");
+      console.log("error submitting review to server " + error);
     })
     //need a catch to handle being offline here
   }
@@ -198,8 +245,10 @@ static addOrUpdateDB_review(review){
     keyValStore.put(review, review.id);
     return tx.complete;
   }).then(function() {
-    //console.log(`Added ${review.id} - ${review} to keyval`);
-  });
+    console.log(`Added ${review.id} - ${review} to keyval`);
+  }).catch(error => {
+    console.log("there was an error saving to indexeddb");
+  })
 }
 
 
