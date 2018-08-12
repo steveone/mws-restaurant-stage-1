@@ -211,6 +211,13 @@ else if (event.target.id == 'submitReview'){
   console.log("time to submit the review")
   console.log(submission);
   DBHelper.submitNewReviewToServer(submission);
+  //we should close the submission form here
+  const reviewForm = document.getElementById('reviewForm');
+  reviewForm.innerHTML = '';
+  const reviewList = document.getElementById('reviews-list');
+  reviewList.innerHTML = '';
+  //do a refresh from the server (or idb if offline);
+  fetchRestaurantReviewsFromURL();
   }
 });
 /**
