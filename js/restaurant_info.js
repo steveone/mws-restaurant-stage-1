@@ -351,7 +351,6 @@ createReviewHTML = (review,i) => {
   comments.id = 'reviewText' + i;
   comments.innerHTML = review.comments;
   li.appendChild(comments);
-
   return li;
 }
 
@@ -360,9 +359,9 @@ createReviewHTML = (review,i) => {
  */
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
-  const li = document.createElement('li');
+  const div = document.createElement('div');
   li.innerHTML = restaurant.name;
-  breadcrumb.appendChild(li);
+  breadcrumb.appendChild(div);
 }
 
 /**

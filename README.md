@@ -2,7 +2,7 @@
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
-## Project Stage 2
+## Project Stage 3
 
 To Run: Download project from github repo.
 
@@ -19,4 +19,7 @@ To Run: Download project from github repo.
 
 3. Run Grunt to create the required resposive images. If the images are not there, the service worker may fail depending on your OS.
 
-4. With your server running, visit the site: `http://localhost:8000`, and look around for a bit to see what the current experience looks like.
+4. Make sure the mws-restaurant-stage-3 server is online as well.
+
+5. With your server running, visit the site: `http://localhost:8000`, and look around for a bit to see what the current experience looks like.
+
