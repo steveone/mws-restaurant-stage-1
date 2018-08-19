@@ -357,8 +357,8 @@ h2{
 	}
 
 	a {
-		background-color: #d4e9f8;
-		color: white;
+		background-color: white;
+		color: black;
 		font-size: 11px;
 		width: calc(100% * (1/2) - 10px - 1px);
 	}
@@ -388,8 +388,8 @@ h2{
 	}
 
 	a {
-		background-color: #d4e9f8;
-		color: #010e6b;
+		background-color: white;
+		color: black;
 		font-size: 11px;
 		width: calc(100% * (1/2) - 10px - 1px);
 	}
@@ -416,7 +416,7 @@ h2{
 	}
 
 	a {
-		background-color: #d4e9f8;
+		background-color: white;
 		color: black;
 		font-size: 11px;
 		width: calc(100% * (1/2) - 10px - 1px);
