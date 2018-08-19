@@ -48,65 +48,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
    })
  }
 
-
-openReviewForm  = (id) => {
-  console.log("should open review form here");
+showReviewForm = (id) => {
   const reviewForm = document.getElementById('reviewForm');
-  //if the form is already open, clear it and start a fresh onkeyup
-  //we may want to leave the current form in place in the future
-  reviewForm.innerHTML = "";
-  const form = document.createElement('form');
-
-  const div1 = document.createElement('div');
-  div1.className = 'inputDiv';
-  const inputLabel = document.createElement('label');
-  inputLabel.className = 'label';
-  inputLabel.innerHTML = 'Your name:';
-  inputLabel.setAttribute('for','nameInput');
-  const input = document.createElement('input');
-  input.className = 'inputLabel';
-  input.id = 'nameInput';
-  input.type = 'text';
-  form.appendChild(div1);
-  div1.appendChild(inputLabel);
-  div1.appendChild(input);
-
-//form element for rating to be fixed
-const div2 = document.createElement('div');
-div2.className = 'inputDiv';
-const inputRating = document.createElement('label');
-inputRating.innerHTML = 'Rating (1-4):';
-inputRating.setAttribute('for','rating');
-inputRating.className = 'label';
-const inputRatingEntry = document.createElement('input');
-inputRatingEntry.className = 'inputLabel';
-inputRatingEntry.id = 'rating';
-inputRatingEntry.type = 'text';
-form.appendChild(div2);
-div2.appendChild(inputRating);
-div2.appendChild(inputRatingEntry);
-
-  const commentLabel = document.createElement('label');
-  commentLabel.innerHTML = 'Comment:'
-  commentLabel.setAttribute('for', 'reviewComment');
-  commentLabel.className = 'inpputLabel';
-  const textarea = document.createElement('textarea');
-  textarea.setAttribute('rows','10');
-  textarea.setAttribute('cols','50');
-  textarea.className = 'inputLabel';
-  textarea.id = 'reviewComment';
-  form.appendChild(commentLabel);
-  form.appendChild(textarea);
-  const submitCommentBtn = document.createElement('button');
-  submitCommentBtn.innerHTML = 'Submit Review';
-  submitCommentBtn.id = 'submitReview';
-  form.appendChild(submitCommentBtn);
-  const clearCommentBtn = document.createElement('button');
-  clearCommentBtn.innerHTML = 'Clear Review';
-  clearCommentBtn.id = 'clearReview'
-  form.appendChild(clearCommentBtn);
-  reviewForm.appendChild(form);
+  reviewForm.style.visibility = 'visible';
+  reviewForm.style.height = '100%';
 }
+
+clearReviewForm = (id) => {
+  document.getElementById('addReviewForm').reset();
+}
+
+
+
 
 /**
  * Get current restaurant from page URL.
@@ -190,12 +143,13 @@ const clickedItem = event.target
 if (event.target.className == 'reviewBtn'){
     event.preventDefault();
     console.log("review btn clicked " + restaurant_id);
-    openReviewForm(restaurant_id);
+    //openReviewForm(restaurant_id);
+    showReviewForm(restaurant_id);
     }
 else if (event.target.id == 'clearReview'){
   event.preventDefault();
   console.log("clearing review entries")
-  openReviewForm(restaurant_id);
+  clearReviewForm(restaurant_id);
   }
 else if (event.target.id == 'submitReview'){
   event.preventDefault();

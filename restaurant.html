@@ -53,6 +53,22 @@
     <!-- end restaurant -->
     <!-- Beginning reviews -->
     <section id="reviews-container">
+      <div class="reviewForm hidden" id="reviewForm">
+        <form id="addReviewForm">
+          <div class="inputDiv">
+            <label class="label" for="nameInput">Your name:</label>
+            <input class="inputLabel" id="nameInput" type="text">
+          </div>
+          <div class="inputDiv">
+            <label for="rating" class="label">Rating (1-4):</label>
+            <input class="inputLabel" id="rating" type="text">
+          </div>
+          <label for="reviewComment" class="inpputLabel">Comment:</label>
+          <textarea rows="10" cols="50" class="inputLabel" id="reviewComment"></textarea>
+          <button id="submitReview">Submit Review</button>
+          <button id="clearReview">Clear Review</button>
+        </form>
+      </div>
       <ul id="reviews-list"></ul>
     </section>
     <!-- End reviews -->

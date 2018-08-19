@@ -97,6 +97,11 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 	margin-left: 10px;
 }
 
+#reviewForm {
+	visibility: hidden;
+	height:0px;
+}
+
 /* ====================== Navigation ====================== */
 nav {
   width: 100%;
