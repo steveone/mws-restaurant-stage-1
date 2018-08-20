@@ -92,6 +92,11 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 	margin-left: 10px;
 }
 
+.label {
+	width:120px;
+	float:left;
+}
+
 #reviewComment {
 	border: 2px solid lightgray;
 	margin-left: 10px;
@@ -101,6 +106,8 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 	visibility: hidden;
 	height:0px;
 }
+
+
 
 /* ====================== Navigation ====================== */
 nav {
@@ -616,5 +623,6 @@ p.address{
    border-bottom: 1px solid #333333;
    border-left: 1px solid #CCCCCC;
  }
+
 
 }
